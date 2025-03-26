@@ -17,6 +17,7 @@ import {
 import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
+import Analytics from "./pages/Analytics";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -41,7 +42,7 @@ const App = () => (
           } />
           <Route path="/analytics" element={
             <Layout>
-              <PlaceholderPage title="Analytics" icon={BarChart3} />
+              <Analytics />
             </Layout>
           } />
           <Route path="/users" element={
