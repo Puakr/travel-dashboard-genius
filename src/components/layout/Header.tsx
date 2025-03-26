@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { 
   Bell, 
-  Sun, 
   Menu, 
   X
 } from 'lucide-react';
@@ -16,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BrightnessControl } from './BrightnessControl';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -40,9 +40,7 @@ export default function Header({ isMobileOpen, setIsMobileOpen }: HeaderProps) {
       <div className="flex-1 md:flex-initial"></div>
       
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-          <Sun size={20} />
-        </Button>
+        <BrightnessControl />
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
