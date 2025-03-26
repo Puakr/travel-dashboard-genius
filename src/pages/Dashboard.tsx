@@ -10,25 +10,29 @@ export default function Dashboard() {
       title: 'Total Bookings', 
       value: '1,234', 
       icon: Package2, 
-      iconClassName: 'stat-icon-blue' 
+      iconClassName: 'stat-icon-blue',
+      linkTo: '/bookings'
     },
     { 
       title: 'Active Users', 
       value: '856', 
       icon: Users, 
-      iconClassName: 'stat-icon-green'
+      iconClassName: 'stat-icon-green',
+      linkTo: '/users'
     },
     { 
       title: 'Total Revenue', 
       value: '$45,678', 
       icon: DollarSign, 
-      iconClassName: 'stat-icon-yellow'
+      iconClassName: 'stat-icon-yellow',
+      linkTo: '/analytics'
     },
     { 
       title: 'Active Trips', 
       value: '42', 
       icon: Activity, 
-      iconClassName: 'stat-icon-purple'
+      iconClassName: 'stat-icon-purple',
+      linkTo: '/stays'
     }
   ];
   
@@ -45,6 +49,7 @@ export default function Dashboard() {
             icon={stat.icon}
             iconClassName={stat.iconClassName}
             index={index}
+            linkTo={stat.linkTo}
           />
         ))}
       </div>
