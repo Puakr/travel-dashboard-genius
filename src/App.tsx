@@ -11,7 +11,7 @@ import {
   Plane, 
   Bus, 
   Ticket, 
-  Taxi 
+  Car 
 } from "lucide-react";
 
 import Layout from "./components/layout/Layout";
@@ -71,7 +71,7 @@ const App = () => (
           } />
           <Route path="/airport-taxis" element={
             <Layout>
-              <PlaceholderPage title="Airport Taxis" icon={Taxi} />
+              <PlaceholderPage title="Airport Taxis" icon={Car} />
             </Layout>
           } />
           <Route path="*" element={<NotFound />} />

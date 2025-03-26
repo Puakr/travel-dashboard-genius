@@ -9,7 +9,7 @@ import {
   Plane, 
   Bus, 
   Ticket, 
-  Taxi
+  Car
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,7 +29,7 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
     { icon: Plane, label: 'Flights', path: '/flights' },
     { icon: Bus, label: 'Bus Rentals', path: '/bus-rentals' },
     { icon: Ticket, label: 'Attractions', path: '/attractions' },
-    { icon: Taxi, label: 'Airport Taxis', path: '/airport-taxis' },
+    { icon: Car, label: 'Airport Taxis', path: '/airport-taxis' },
   ];
 
   const isActive = (path: string) => {
