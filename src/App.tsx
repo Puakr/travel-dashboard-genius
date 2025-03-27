@@ -19,6 +19,7 @@ import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
 import Analytics from "./pages/Analytics";
+import Users from "./pages/Users";
 import Stays from "./pages/Stays";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
@@ -56,7 +57,7 @@ const App = () => (
             } />
             <Route path="/users" element={
               <Layout>
-                <PlaceholderPage title="Users" icon={Users} />
+                <Users />
               </Layout>
             } />
             <Route path="/stays" element={
