@@ -12,6 +12,15 @@ import {
   Car
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  Sidebar as ShadcnSidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
 
 export default function Sidebar({ isMobile, setIsMobileOpen }: { 
   isMobile?: boolean;
@@ -56,32 +65,66 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
         <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
       </div>
       
-      <div className="flex-1 py-6 px-3 flex flex-col gap-1">
-        {sidebarItems.map((item, index) => {
-          if (item.divider) {
-            return (
-              <div key={index} className="mt-6 mb-2 px-3">
-                <span className="text-xs font-semibold text-gray-500">{item.label}</span>
-              </div>
-            );
-          }
-          
-          const Icon = item.icon!;
-          const active = isActive(item.path!);
-          
-          return (
-            <Link
-              key={index}
-              to={item.path!}
-              className={cn("sidebar-item", active && "active")}
-              onClick={handleItemClick}
-            >
-              <Icon size={20} />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </div>
+      <SidebarContent className="py-0 flex-1">
+        <SidebarGroup>
+          <SidebarMenu>
+            {sidebarItems.filter(item => !item.divider).slice(0, 4).map((item, index) => {
+              const Icon = item.icon!;
+              const active = isActive(item.path!);
+              
+              return (
+                <SidebarMenuItem key={index}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={active}
+                    className="bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark"
+                    tooltip={item.label}
+                  >
+                    <Link 
+                      to={item.path!}
+                      onClick={handleItemClick}
+                      className="flex items-center gap-2"
+                    >
+                      <Icon size={20} />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+        
+        <SidebarGroup className="mt-6">
+          <SidebarGroupLabel className="px-3 text-xs font-semibold text-gray-500">SERVICES</SidebarGroupLabel>
+          <SidebarMenu>
+            {sidebarItems.filter(item => !item.divider).slice(4).map((item, index) => {
+              const Icon = item.icon!;
+              const active = isActive(item.path!);
+              
+              return (
+                <SidebarMenuItem key={index}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={active}
+                    className="bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark"
+                    tooltip={item.label}
+                  >
+                    <Link 
+                      to={item.path!}
+                      onClick={handleItemClick}
+                      className="flex items-center gap-2"
+                    >
+                      <Icon size={20} />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
     </div>
   );
 }

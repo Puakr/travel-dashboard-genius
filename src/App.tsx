@@ -21,6 +21,13 @@ import Analytics from "./pages/Analytics";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
+// Create specific placeholder pages for services
+const StaysPage = () => <PlaceholderPage title="Stays" icon={Hotel} />;
+const FlightsPage = () => <PlaceholderPage title="Flights" icon={Plane} />;
+const BusRentalsPage = () => <PlaceholderPage title="Bus Rentals" icon={Bus} />;
+const AttractionsPage = () => <PlaceholderPage title="Attractions" icon={Ticket} />;
+const AirportTaxisPage = () => <PlaceholderPage title="Airport Taxis" icon={Car} />;
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -52,27 +59,27 @@ const App = () => (
           } />
           <Route path="/stays" element={
             <Layout>
-              <PlaceholderPage title="Stays" icon={Hotel} />
+              <StaysPage />
             </Layout>
           } />
           <Route path="/flights" element={
             <Layout>
-              <PlaceholderPage title="Flights" icon={Plane} />
+              <FlightsPage />
             </Layout>
           } />
           <Route path="/bus-rentals" element={
             <Layout>
-              <PlaceholderPage title="Bus Rentals" icon={Bus} />
+              <BusRentalsPage />
             </Layout>
           } />
           <Route path="/attractions" element={
             <Layout>
-              <PlaceholderPage title="Attractions" icon={Ticket} />
+              <AttractionsPage />
             </Layout>
           } />
           <Route path="/airport-taxis" element={
             <Layout>
-              <PlaceholderPage title="Airport Taxis" icon={Car} />
+              <AirportTaxisPage />
             </Layout>
           } />
           <Route path="*" element={<NotFound />} />
