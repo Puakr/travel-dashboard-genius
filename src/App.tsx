@@ -13,6 +13,7 @@ import {
   Ticket, 
   Car 
 } from "lucide-react";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
@@ -35,56 +36,58 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <Layout>
-              <Dashboard />
-            </Layout>
-          } />
-          <Route path="/bookings" element={
-            <Layout>
-              <Bookings />
-            </Layout>
-          } />
-          <Route path="/analytics" element={
-            <Layout>
-              <Analytics />
-            </Layout>
-          } />
-          <Route path="/users" element={
-            <Layout>
-              <PlaceholderPage title="Users" icon={Users} />
-            </Layout>
-          } />
-          <Route path="/stays" element={
-            <Layout>
-              <StaysPage />
-            </Layout>
-          } />
-          <Route path="/flights" element={
-            <Layout>
-              <FlightsPage />
-            </Layout>
-          } />
-          <Route path="/bus-rentals" element={
-            <Layout>
-              <BusRentalsPage />
-            </Layout>
-          } />
-          <Route path="/attractions" element={
-            <Layout>
-              <AttractionsPage />
-            </Layout>
-          } />
-          <Route path="/airport-taxis" element={
-            <Layout>
-              <AirportTaxisPage />
-            </Layout>
-          } />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SidebarProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={
+              <Layout>
+                <Dashboard />
+              </Layout>
+            } />
+            <Route path="/bookings" element={
+              <Layout>
+                <Bookings />
+              </Layout>
+            } />
+            <Route path="/analytics" element={
+              <Layout>
+                <Analytics />
+              </Layout>
+            } />
+            <Route path="/users" element={
+              <Layout>
+                <PlaceholderPage title="Users" icon={Users} />
+              </Layout>
+            } />
+            <Route path="/stays" element={
+              <Layout>
+                <StaysPage />
+              </Layout>
+            } />
+            <Route path="/flights" element={
+              <Layout>
+                <FlightsPage />
+              </Layout>
+            } />
+            <Route path="/bus-rentals" element={
+              <Layout>
+                <BusRentalsPage />
+              </Layout>
+            } />
+            <Route path="/attractions" element={
+              <Layout>
+                <AttractionsPage />
+              </Layout>
+            } />
+            <Route path="/airport-taxis" element={
+              <Layout>
+                <AirportTaxisPage />
+              </Layout>
+            } />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SidebarProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

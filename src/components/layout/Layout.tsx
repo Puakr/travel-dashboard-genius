@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [isMobile]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full">
       <Header isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
       
       <div className="flex-1 flex">
