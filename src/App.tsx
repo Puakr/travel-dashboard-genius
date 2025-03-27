@@ -19,11 +19,11 @@ import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
 import Analytics from "./pages/Analytics";
+import Stays from "./pages/Stays";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
 // Create specific placeholder pages for services
-const StaysPage = () => <PlaceholderPage title="Stays" icon={Hotel} />;
 const FlightsPage = () => <PlaceholderPage title="Flights" icon={Plane} />;
 const BusRentalsPage = () => <PlaceholderPage title="Bus Rentals" icon={Bus} />;
 const AttractionsPage = () => <PlaceholderPage title="Attractions" icon={Ticket} />;
@@ -61,7 +61,7 @@ const App = () => (
             } />
             <Route path="/stays" element={
               <Layout>
-                <StaysPage />
+                <Stays />
               </Layout>
             } />
             <Route path="/flights" element={
