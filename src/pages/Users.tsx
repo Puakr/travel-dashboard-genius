@@ -10,7 +10,8 @@ import {
   Trash, 
   Edit, 
   Eye, 
-  Mail
+  Mail,
+  UsersIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
