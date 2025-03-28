@@ -1,9 +1,13 @@
 
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Bell, 
   Menu, 
-  X
+  X,
+  User,
+  Settings,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BrightnessControl } from './BrightnessControl';
+import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -25,6 +30,8 @@ interface HeaderProps {
 
 export default function Header({ isMobileOpen, setIsMobileOpen }: HeaderProps) {
   const [notifications, setNotifications] = useState(3);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   
   return (
     <header className="h-16 border-b border-white/[0.03] flex items-center justify-between px-4 md:px-6 bg-zippy-darker sticky top-0 z-50">
@@ -88,19 +95,28 @@ export default function Header({ isMobileOpen, setIsMobileOpen }: HeaderProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative flex items-center gap-2 h-8 pr-2 rounded-full hover:bg-white/5">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="https://github.com/shadcn.png" alt="Admin" />
-                <AvatarFallback>AD</AvatarFallback>
+                <AvatarImage src="https://github.com/shadcn.png" alt={user?.name || "User"} />
+                <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium mr-1 hidden sm:inline-block">Admin</span>
+              <span className="text-sm font-medium mr-1 hidden sm:inline-block">{user?.name || "User"}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/profile")}>
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/settings")}>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={logout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
