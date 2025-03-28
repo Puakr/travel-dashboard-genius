@@ -3,16 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { 
-  BarChart3, 
-  Users as UsersIcon, 
-  Hotel, 
-  Plane, 
-  Bus, 
-  Ticket, 
-  Car 
-} from "lucide-react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -26,14 +17,11 @@ import Stays from "./pages/Stays";
 import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
-
-// Create specific placeholder pages for services
-const FlightsPage = () => <PlaceholderPage title="Flights" icon={Plane} />;
-const BusRentalsPage = () => <PlaceholderPage title="Bus Rentals" icon={Bus} />;
-const AttractionsPage = () => <PlaceholderPage title="Attractions" icon={Ticket} />;
-const AirportTaxisPage = () => <PlaceholderPage title="Airport Taxis" icon={Car} />;
+import Flights from "./pages/Flights";
+import BusRentals from "./pages/BusRentals";
+import Attractions from "./pages/Attractions";
+import AirportTaxis from "./pages/AirportTaxis";
 
 const queryClient = new QueryClient();
 
@@ -86,28 +74,28 @@ const App = () => (
               <Route path="/flights" element={
                 <ProtectedRoute>
                   <Layout>
-                    <FlightsPage />
+                    <Flights />
                   </Layout>
                 </ProtectedRoute>
               } />
               <Route path="/bus-rentals" element={
                 <ProtectedRoute>
                   <Layout>
-                    <BusRentalsPage />
+                    <BusRentals />
                   </Layout>
                 </ProtectedRoute>
               } />
               <Route path="/attractions" element={
                 <ProtectedRoute>
                   <Layout>
-                    <AttractionsPage />
+                    <Attractions />
                   </Layout>
                 </ProtectedRoute>
               } />
               <Route path="/airport-taxis" element={
                 <ProtectedRoute>
                   <Layout>
-                    <AirportTaxisPage />
+                    <AirportTaxis />
                   </Layout>
                 </ProtectedRoute>
               } />
