@@ -38,8 +38,9 @@ export default function Header({ isMobileOpen, setIsMobileOpen }: HeaderProps) {
       <Button 
         variant="ghost" 
         size="icon" 
-        className="md:hidden"
+        className="md:hidden text-gray-400 hover:text-white"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
+        aria-label="Toggle menu"
       >
         {isMobileOpen ? <X /> : <Menu />}
       </Button>

@@ -56,12 +56,16 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
       "w-64 bg-zippy-darker h-full flex flex-col border-r border-white/[0.03] transition-all duration-300",
       isMobile && "w-full"
     )}>
-      <div className="p-4 border-b border-white/[0.03] flex items-center gap-2">
+      <Link 
+        to="/" 
+        className="p-4 border-b border-white/[0.03] flex items-center gap-2 hover:bg-zippy-dark transition-colors duration-200"
+        onClick={handleItemClick}
+      >
         <div className="text-zippy-blue mr-2">
           <Plane size={24} />
         </div>
         <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
-      </div>
+      </Link>
       
       <SidebarContent className="py-0 flex-1">
         <SidebarGroup>
