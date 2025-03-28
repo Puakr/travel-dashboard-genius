@@ -58,9 +58,7 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
     )}>
       <div className="p-4 border-b border-white/[0.03] flex items-center gap-2">
         <div className="text-zippy-blue mr-2">
-          <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-          </svg>
+          <Plane size={24} />
         </div>
         <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
       </div>
