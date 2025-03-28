@@ -157,7 +157,7 @@ export default function Users() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Users className="text-zippy-blue" />
+          <UsersIcon className="text-zippy-blue" />
           Users
         </h1>
         
@@ -264,7 +264,7 @@ export default function Users() {
       {/* User details sidebar */}
       {selectedUser && (
         <Sheet open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
-          <SheetContent className="w-full sm:max-w-md">
+          <SheetContent>
             <SheetHeader>
               <SheetTitle>User Details</SheetTitle>
             </SheetHeader>
