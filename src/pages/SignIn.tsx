@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -9,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,30 +27,23 @@ export default function SignIn() {
     setIsLoading(true);
     setError("");
     
-    // For demo purposes, hardcoded credentials
-    if (email === "admin@example.com" && password === "password") {
-      // Simulate API call delay
-      setTimeout(() => {
-        // Store authentication state
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("user", JSON.stringify({
-          name: "Admin",
-          email: "admin@example.com",
-          role: "Administrator"
-        }));
-        
-        setIsLoading(false);
+    try {
+      const success = await login(email, password);
+      if (success) {
         navigate("/");
-      }, 1000);
-    } else {
-      setError("Invalid credentials");
+      } else {
+        setError("Invalid credentials");
+      }
+    } catch (err) {
+      setError("An error occurred during sign in");
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zippy-darker">
-      <div className="w-full max-w-md px-4">
+      <div className="w-full max-w-md px-4 mx-auto">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-white">Zippy Admin</h1>
           <p className="mt-2 text-gray-400">Sign in to your account to continue</p>
