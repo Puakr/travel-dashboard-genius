@@ -51,12 +51,12 @@ export default function SignIn() {
             </div>
             <h1 className="text-4xl font-bold text-white">ZippyTrip</h1>
           </div>
-          <p className="text-gray-400 text-center">Sign in to your account to continue</p>
+          <p className="text-gray-400">Sign in to your account to continue</p>
         </div>
         
-        <Card className="border-white/[0.05] shadow-lg">
+        <Card className="border-white/[0.05] bg-zippy-dark shadow-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+            <CardTitle className="text-2xl font-semibold text-center">Sign In</CardTitle>
             <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
           </CardHeader>
           <CardContent>
@@ -69,7 +69,7 @@ export default function SignIn() {
             <form onSubmit={handleSignIn}>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  <label htmlFor="email" className="block text-sm font-medium text-white">
                     Email
                   </label>
                   <Input
@@ -78,10 +78,11 @@ export default function SignIn() {
                     placeholder="admin@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="bg-zippy-darker border-white/10"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  <label htmlFor="password" className="block text-sm font-medium text-white">
                     Password
                   </label>
                   <Input
@@ -90,10 +91,15 @@ export default function SignIn() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="bg-zippy-darker border-white/10"
                   />
                 </div>
               </div>
-              <Button className="mt-6 w-full bg-zippy-blue hover:bg-zippy-blue/90" type="submit" disabled={isLoading}>
+              <Button 
+                className="mt-6 w-full bg-zippy-blue hover:bg-zippy-blue/90 rounded-md h-12" 
+                type="submit" 
+                disabled={isLoading}
+              >
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
