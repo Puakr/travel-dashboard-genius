@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Plane } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,15 +44,20 @@ export default function SignIn() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zippy-darker">
       <div className="w-full max-w-md px-4 mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-white">Zippy Admin</h1>
-          <p className="mt-2 text-gray-400">Sign in to your account to continue</p>
+        <div className="flex flex-col items-center justify-center mb-8">
+          <div className="flex items-center justify-center mb-4">
+            <div className="text-zippy-blue mr-2">
+              <Plane size={40} />
+            </div>
+            <h1 className="text-4xl font-bold text-white">ZippyTrip</h1>
+          </div>
+          <p className="text-gray-400 text-center">Sign in to your account to continue</p>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>Sign In</CardTitle>
-            <CardDescription>Enter your credentials to access your account</CardDescription>
+        <Card className="border-white/[0.05] shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+            <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
           </CardHeader>
           <CardContent>
             {error && (
@@ -88,7 +93,7 @@ export default function SignIn() {
                   />
                 </div>
               </div>
-              <Button className="mt-6 w-full" type="submit" disabled={isLoading}>
+              <Button className="mt-6 w-full bg-zippy-blue hover:bg-zippy-blue/90" type="submit" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
