@@ -9,7 +9,8 @@ import {
   Plane, 
   Bus, 
   Ticket, 
-  Car
+  Car,
+  Menu
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -21,6 +22,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import { Button } from '@/components/ui/button';
 
 export default function Sidebar({ isMobile, setIsMobileOpen }: { 
   isMobile?: boolean;
@@ -50,22 +52,41 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
       setIsMobileOpen(false);
     }
   };
+
+  const toggleMobileMenu = () => {
+    if (isMobile && setIsMobileOpen) {
+      setIsMobileOpen(false);
+    }
+  };
   
   return (
     <div className={cn(
       "w-64 bg-zippy-darker h-full flex flex-col border-r border-white/[0.03] transition-all duration-300",
       isMobile && "w-full"
     )}>
-      <Link 
-        to="/" 
-        className="p-4 border-b border-white/[0.03] flex items-center gap-2 hover:bg-zippy-dark transition-colors duration-200"
-        onClick={handleItemClick}
-      >
-        <div className="text-zippy-blue mr-2">
-          <Plane size={24} />
-        </div>
-        <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
-      </Link>
+      <div className="p-4 border-b border-white/[0.05] flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="flex items-center gap-2 hover:bg-zippy-dark transition-colors duration-200"
+          onClick={handleItemClick}
+        >
+          <div className="text-zippy-blue mr-2">
+            <Plane size={24} />
+          </div>
+          <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
+        </Link>
+        
+        {isMobile && (
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleMobileMenu}
+            className="md:hidden text-gray-400 hover:text-white"
+          >
+            <Menu size={24} />
+          </Button>
+        )}
+      </div>
       
       <SidebarContent className="py-0 flex-1">
         <SidebarGroup>
@@ -79,7 +100,10 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
                   <SidebarMenuButton
                     asChild
                     isActive={active}
-                    className="bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark"
+                    className={cn(
+                      "bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark",
+                      active && "bg-white/[0.05]"
+                    )}
                     tooltip={item.label}
                   >
                     <Link 
@@ -109,7 +133,10 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
                   <SidebarMenuButton
                     asChild
                     isActive={active}
-                    className="bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark"
+                    className={cn(
+                      "bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark",
+                      active && "bg-white/[0.05]"
+                    )}
                     tooltip={item.label}
                   >
                     <Link 
