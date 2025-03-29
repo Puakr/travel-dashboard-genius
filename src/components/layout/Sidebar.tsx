@@ -52,12 +52,6 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
       setIsMobileOpen(false);
     }
   };
-
-  const toggleMobileMenu = () => {
-    if (isMobile && setIsMobileOpen) {
-      setIsMobileOpen(false);
-    }
-  };
   
   return (
     <div className={cn(
@@ -75,17 +69,6 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
           </div>
           <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
         </Link>
-        
-        {isMobile && (
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleMobileMenu}
-            className="md:hidden text-gray-400 hover:text-white"
-          >
-            <Menu size={24} />
-          </Button>
-        )}
       </div>
       
       <SidebarContent className="py-0 flex-1">
