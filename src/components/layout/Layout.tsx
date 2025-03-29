@@ -16,7 +16,8 @@ export default function Layout({ children }: LayoutProps) {
   // Close mobile sidebar when resizing to desktop
   useEffect(() => {
     if (!isMobile) {
-      setIsMobileOpen(false);
+      // We no longer automatically close the sidebar when switching to desktop
+      // since we want the toggle button to work on desktop too
     }
   }, [isMobile]);
 
@@ -25,10 +26,10 @@ export default function Layout({ children }: LayoutProps) {
       <Header isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
       
       <div className="flex-1 flex">
-        {/* Desktop sidebar */}
-        {!isMobile && <Sidebar />}
+        {/* Desktop sidebar - Only show when not collapsed */}
+        {!isMobile && !isMobileOpen && <Sidebar />}
         
-        {/* Mobile sidebar */}
+        {/* Mobile sidebar overlay */}
         {isMobile && (
           <div
             className={cn(
@@ -49,7 +50,10 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         )}
         
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className={cn(
+          "flex-1 p-4 md:p-6 overflow-auto",
+          !isMobile && isMobileOpen && "ml-64" // Add margin when sidebar is open on desktop
+        )}>
           {children}
         </main>
       </div>
