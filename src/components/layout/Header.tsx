@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BrightnessControl } from './BrightnessControl';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 // Remove the HeaderProps interface since we no longer need those props
 export default function Header() {
@@ -45,6 +46,7 @@ export default function Header() {
       
       <div className="flex items-center gap-2">
         <BrightnessControl />
+        <ThemeSwitcher />
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

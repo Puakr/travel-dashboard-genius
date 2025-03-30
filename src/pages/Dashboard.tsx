@@ -3,36 +3,43 @@ import { Package2, Users, DollarSign, Activity } from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
 import RevenueChart from '@/components/dashboard/RevenueChart';
 import RecentBookings from '@/components/dashboard/RecentBookings';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  
   const stats = [
     { 
       title: 'Total Bookings', 
       value: '1,234', 
       icon: Package2, 
       iconClassName: 'stat-icon-blue',
-      linkTo: '/bookings'
+      linkTo: '/bookings',
+      onClick: () => navigate('/bookings')
     },
     { 
       title: 'Active Users', 
       value: '856', 
       icon: Users, 
       iconClassName: 'stat-icon-green',
-      linkTo: '/users'
+      linkTo: '/users',
+      onClick: () => navigate('/users')
     },
     { 
       title: 'Total Revenue', 
       value: '$45,678', 
       icon: DollarSign, 
       iconClassName: 'stat-icon-yellow',
-      linkTo: '/analytics'
+      linkTo: '/analytics',
+      onClick: () => navigate('/analytics')
     },
     { 
       title: 'Active Trips', 
       value: '42', 
       icon: Activity, 
       iconClassName: 'stat-icon-purple',
-      linkTo: '/stays'
+      linkTo: '/stays',
+      onClick: () => navigate('/stays')
     }
   ];
   
@@ -50,6 +57,7 @@ export default function Dashboard() {
             iconClassName={stat.iconClassName}
             index={index}
             linkTo={stat.linkTo}
+            onClick={stat.onClick}
           />
         ))}
       </div>
