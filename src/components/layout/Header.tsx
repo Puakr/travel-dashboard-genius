@@ -23,12 +23,8 @@ import { BrightnessControl } from './BrightnessControl';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
-interface HeaderProps {
-  isMobileOpen: boolean;
-  setIsMobileOpen: (open: boolean) => void;
-}
-
-export default function Header({ isMobileOpen, setIsMobileOpen }: HeaderProps) {
+// Remove the HeaderProps interface since we no longer need those props
+export default function Header() {
   const [notifications, setNotifications] = useState(3);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
