@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -61,11 +62,14 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
         <Button 
           variant="ghost" 
           size="icon" 
-          className="text-gray-400 hover:text-white"
+          className="text-gray-400 hover:text-white hover:bg-zippy-dark active:scale-95 transition-all duration-200"
           onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
           aria-label="Close menu"
         >
-          <Menu size={24} />
+          <Menu 
+            size={24} 
+            className="transform transition-transform duration-200 hover:rotate-90"
+          />
         </Button>
       </div>
       
