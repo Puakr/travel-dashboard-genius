@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -59,16 +58,15 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
       isMobile && "w-full"
     )}>
       <div className="p-4 border-b border-white/[0.05] flex items-center justify-between">
-        <Link 
-          to="/" 
-          className="flex items-center gap-2 hover:bg-zippy-dark transition-colors duration-200"
-          onClick={handleItemClick}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-gray-400 hover:text-white"
+          onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+          aria-label="Close menu"
         >
-          <div className="text-zippy-blue mr-2">
-            <Plane size={24} />
-          </div>
-          <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
-        </Link>
+          <Menu size={24} />
+        </Button>
       </div>
       
       <SidebarContent className="py-0 flex-1">
