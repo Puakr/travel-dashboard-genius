@@ -43,7 +43,7 @@ export default function SignIn() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zippy-darker">
-      <div className="w-full max-w-md px-4 mx-auto">
+      <div className="w-full max-w-md px-4 py-8 mx-auto">
         <div className="flex flex-col items-center justify-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="text-zippy-blue mr-2">
