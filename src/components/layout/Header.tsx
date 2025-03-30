@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Bell, 
-  Menu, 
   X,
   User,
   Settings,
@@ -46,16 +45,6 @@ export default function Header({ isMobileOpen, setIsMobileOpen }: HeaderProps) {
           </div>
           <h1 className="text-xl font-bold text-white">ZippyTrip</h1>
         </Link>
-        
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="text-gray-400 hover:text-white"
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileOpen ? <X /> : <Menu />}
-        </Button>
       </div>
       
       <div className="flex items-center gap-2">

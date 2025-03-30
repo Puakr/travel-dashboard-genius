@@ -51,8 +51,9 @@ export default function Layout({ children }: LayoutProps) {
         )}
         
         <main className={cn(
-          "flex-1 p-4 md:p-6 overflow-auto",
-          !isMobile && isMobileOpen && "ml-64" // Add margin when sidebar is open on desktop
+          "flex-1 p-4 md:p-6 overflow-auto transition-all duration-300",
+          !isMobile && isMobileOpen && "ml-64", // Add margin when sidebar is open on desktop
+          !isMobile && !isMobileOpen && "w-full" // Full width when sidebar is closed on desktop
         )}>
           {children}
         </main>
