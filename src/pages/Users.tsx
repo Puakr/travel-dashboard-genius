@@ -4,14 +4,13 @@ import {
   Search, 
   PlusCircle, 
   Filter, 
-  MoreHorizontal, 
-  Check, 
-  X, 
-  Trash, 
   Edit, 
   Eye, 
   Mail,
-  UsersIcon
+  UsersIcon,
+  Trash,
+  Save,
+  Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,8 +37,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Define mock user data
 interface User {
@@ -50,6 +56,7 @@ interface User {
   status: "active" | "inactive" | "pending";
   joinDate: string;
   lastActive: string;
+  password?: string;
 }
 
 const mockUsers: User[] = [
@@ -109,12 +116,49 @@ const mockUsers: User[] = [
   }
 ];
 
+// Validation schemas
+const userFormSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  role: z.string().min(1, { message: "Please select a role." }),
+  status: z.enum(["active", "inactive", "pending"]),
+});
+
+const passwordFormSchema = z.object({
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  confirmPassword: z.string().min(6, { message: "Password must be at least 6 characters." }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 export default function Users() {
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditUserOpen, setIsEditUserOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  
+  // Initialize form
+  const userForm = useForm<z.infer<typeof userFormSchema>>({
+    resolver: zodResolver(userFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      role: "",
+      status: "active" as const,
+    },
+  });
+  
+  const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+  });
   
   // Filter users based on search term
   const filteredUsers = users.filter(user => 
@@ -136,6 +180,79 @@ export default function Users() {
   const handleViewUser = (user: User) => {
     setSelectedUser(user);
   };
+  
+  // Handle edit user
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    userForm.reset({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+    });
+    setIsEditUserOpen(true);
+  };
+  
+  // Handle save user changes
+  const onSaveUserChanges = (data: z.infer<typeof userFormSchema>) => {
+    if (selectedUser) {
+      const updatedUsers = users.map(user => 
+        user.id === selectedUser.id 
+          ? { ...user, ...data } 
+          : user
+      );
+      setUsers(updatedUsers);
+      toast.success(`User ${data.name} has been updated.`);
+      setIsEditUserOpen(false);
+    }
+  };
+  
+  // Handle add new user
+  const onAddUser = (data: z.infer<typeof userFormSchema>) => {
+    const newUser: User = {
+      id: `${users.length + 1}`,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      status: data.status,
+      joinDate: new Date().toISOString().split('T')[0],
+      lastActive: new Date().toISOString().split('T')[0],
+    };
+    
+    setUsers([...users, newUser]);
+    toast.success(`User ${data.name} has been added.`);
+    setIsAddUserOpen(false);
+    userForm.reset();
+  };
+  
+  // Handle change password
+  const handleOpenChangePassword = (user: User) => {
+    setSelectedUser(user);
+    passwordForm.reset();
+    setIsChangePasswordOpen(true);
+  };
+  
+  const onChangePassword = (data: z.infer<typeof passwordFormSchema>) => {
+    if (selectedUser) {
+      // In a real app, you would send this to an API
+      // For now, we'll just show a success message
+      toast.success(`Password for ${selectedUser.name} has been updated.`);
+      setIsChangePasswordOpen(false);
+      passwordForm.reset();
+    }
+  };
+  
+  // Reset form when opening add user dialog
+  useEffect(() => {
+    if (isAddUserOpen) {
+      userForm.reset({
+        name: "",
+        email: "",
+        role: "",
+        status: "active",
+      });
+    }
+  }, [isAddUserOpen, userForm]);
 
   // Status badge component
   const StatusBadge = ({ status }: { status: User['status'] }) => {
@@ -183,8 +300,8 @@ export default function Users() {
           <div className="flex justify-between mb-4 flex-col sm:flex-row gap-3">
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-              <input
-                className="w-full bg-background border rounded-md pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-zippy-blue"
+              <Input
+                className="w-full pl-8"
                 placeholder="Search users..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -225,6 +342,7 @@ export default function Users() {
                           size="icon" 
                           className="h-8 w-8"
                           onClick={() => handleViewUser(user)}
+                          title="View user details"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -232,8 +350,19 @@ export default function Users() {
                           variant="ghost" 
                           size="icon" 
                           className="h-8 w-8 text-blue-600"
+                          onClick={() => handleEditUser(user)}
+                          title="Edit user"
                         >
                           <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 text-amber-600"
+                          onClick={() => handleOpenChangePassword(user)}
+                          title="Change password"
+                        >
+                          <Lock className="h-4 w-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
@@ -243,6 +372,7 @@ export default function Users() {
                             setSelectedUser(user);
                             setIsDeleteDialogOpen(true);
                           }}
+                          title="Delete user"
                         >
                           <Trash className="h-4 w-4" />
                         </Button>
@@ -264,7 +394,7 @@ export default function Users() {
       
       {/* User details sidebar */}
       {selectedUser && (
-        <Sheet open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
+        <Sheet open={!!selectedUser && !isEditUserOpen && !isDeleteDialogOpen && !isChangePasswordOpen} onOpenChange={() => setSelectedUser(null)}>
           <SheetContent>
             <SheetHeader>
               <SheetTitle>User Details</SheetTitle>
@@ -311,11 +441,11 @@ export default function Users() {
                 <div className="space-y-2">
                   <h4 className="text-sm font-medium text-gray-500">Recent Activity</h4>
                   <div className="space-y-2 text-sm">
-                    <div className="bg-gray-50 p-2 rounded">
+                    <div className="bg-gray-50 p-2 rounded dark:bg-gray-800">
                       <p className="font-medium">Login from new device</p>
                       <p className="text-gray-500 text-xs">Today at 10:45 AM</p>
                     </div>
-                    <div className="bg-gray-50 p-2 rounded">
+                    <div className="bg-gray-50 p-2 rounded dark:bg-gray-800">
                       <p className="font-medium">Updated profile picture</p>
                       <p className="text-gray-500 text-xs">Yesterday at 2:30 PM</p>
                     </div>
@@ -324,15 +454,22 @@ export default function Users() {
               </div>
               
               <div className="space-x-2 mt-6 flex">
-                <Button className="flex-1 bg-zippy-blue hover:bg-zippy-blue/90">
+                <Button 
+                  className="flex-1 bg-zippy-blue hover:bg-zippy-blue/90"
+                  onClick={() => {
+                    handleEditUser(selectedUser);
+                    setSelectedUser(null);
+                  }}
+                >
                   <Edit className="mr-2 h-4 w-4" />
                   Edit User
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="flex-1 text-red-600 border-red-200 hover:bg-red-50"
+                  className="flex-1 text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/20"
                   onClick={() => {
                     setIsDeleteDialogOpen(true);
+                    setSelectedUser(null);
                   }}
                 >
                   <Trash className="mr-2 h-4 w-4" />
@@ -353,78 +490,276 @@ export default function Users() {
               Create a new user account. Fill in all the required details.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Full Name</label>
-              <input 
-                className="w-full border rounded-md px-3 py-2"
-                placeholder="Enter user's full name" 
+          <Form {...userForm}>
+            <form onSubmit={userForm.handleSubmit(onAddUser)} className="space-y-4 py-4">
+              <FormField
+                control={userForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter user's full name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
-              <input 
-                className="w-full border rounded-md px-3 py-2"
-                placeholder="Enter user's email" 
-                type="email"
+              
+              <FormField
+                control={userForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter user's email" type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Role</label>
-              <select className="w-full border rounded-md px-3 py-2">
-                <option value="">Select role</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="User">User</option>
-                <option value="Support">Support</option>
-              </select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setIsAddUserOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button 
-              className="bg-zippy-blue hover:bg-zippy-blue/90"
-              onClick={() => {
-                toast.success("User added successfully!");
-                setIsAddUserOpen(false);
-              }}
-            >
-              Add User
-            </Button>
-          </DialogFooter>
+              
+              <FormField
+                control={userForm.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <FormControl>
+                      <select className="w-full border rounded-md px-3 py-2 bg-background" {...field}>
+                        <option value="">Select role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="User">User</option>
+                        <option value="Support">Support</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={userForm.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <FormControl>
+                      <select className="w-full border rounded-md px-3 py-2 bg-background" 
+                        {...field}
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="pending">Pending</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button 
+                  variant="outline" 
+                  type="button"
+                  onClick={() => setIsAddUserOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="bg-zippy-blue hover:bg-zippy-blue/90"
+                  type="submit"
+                >
+                  Add User
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Edit User Dialog */}
+      <Dialog open={isEditUserOpen} onOpenChange={setIsEditUserOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>
+              Update user account details.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...userForm}>
+            <form onSubmit={userForm.handleSubmit(onSaveUserChanges)} className="space-y-4 py-4">
+              <FormField
+                control={userForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={userForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={userForm.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <FormControl>
+                      <select className="w-full border rounded-md px-3 py-2 bg-background" {...field}>
+                        <option value="">Select role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="User">User</option>
+                        <option value="Support">Support</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={userForm.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <FormControl>
+                      <select className="w-full border rounded-md px-3 py-2 bg-background" 
+                        {...field}
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="pending">Pending</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button 
+                  variant="outline" 
+                  type="button"
+                  onClick={() => setIsEditUserOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="bg-zippy-blue hover:bg-zippy-blue/90"
+                  type="submit"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Changes
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Change Password Dialog */}
+      <Dialog open={isChangePasswordOpen} onOpenChange={setIsChangePasswordOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Change Password</DialogTitle>
+            <DialogDescription>
+              {selectedUser && `Update password for ${selectedUser.name}.`}
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...passwordForm}>
+            <form onSubmit={passwordForm.handleSubmit(onChangePassword)} className="space-y-4 py-4">
+              <FormField
+                control={passwordForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={passwordForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button 
+                  variant="outline" 
+                  type="button"
+                  onClick={() => setIsChangePasswordOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="bg-zippy-blue hover:bg-zippy-blue/90"
+                  type="submit"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  Update Password
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
       
       {/* Delete User Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
-            <DialogDescription>
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete User</AlertDialogTitle>
+            <AlertDialogDescription>
               Are you sure you want to delete this user? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setIsDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="destructive"
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
               onClick={handleDeleteUser}
+              className="bg-red-500 hover:bg-red-600"
             >
               Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
