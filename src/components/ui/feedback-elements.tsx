@@ -1,10 +1,10 @@
 
 import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Label, labelVariants } from "@/components/ui/label"
 
 // Alert Components
 const alertVariants = cva(
@@ -81,29 +81,11 @@ const Progress = React.forwardRef<
 ))
 Progress.displayName = ProgressPrimitive.Root.displayName
 
-// Label Component
-const labelVariants = cva(
-  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-)
-
-const Label = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-    VariantProps<typeof labelVariants>
->(({ className, ...props }, ref) => (
-  <LabelPrimitive.Root
-    ref={ref}
-    className={cn(labelVariants(), className)}
-    {...props}
-  />
-))
-Label.displayName = LabelPrimitive.Root.displayName
-
 export { 
   Alert, 
   AlertTitle, 
   AlertDescription, 
   Progress, 
   Label, 
-  labelVariants 
+  labelVariants
 }
