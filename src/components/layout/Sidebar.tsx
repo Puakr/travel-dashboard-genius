@@ -10,7 +10,9 @@ import {
   Bus, 
   Ticket, 
   Car,
-  Menu
+  Menu,
+  Settings,
+  User
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -32,19 +34,16 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
   
   const sidebarItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-    { icon: CalendarRange, label: 'Bookings', path: '/bookings' },
-    { icon: BarChart3, label: 'Analytics', path: '/analytics' },
-    { icon: Users, label: 'Users', path: '/users' },
-    { divider: true, label: 'SERVICES' },
-    { icon: Hotel, label: 'Stays', path: '/stays' },
-    { icon: Plane, label: 'Flights', path: '/flights' },
-    { icon: Bus, label: 'Bus Rentals', path: '/bus-rentals' },
-    { icon: Ticket, label: 'Attractions', path: '/attractions' },
-    { icon: Car, label: 'Airport Taxis', path: '/airport-taxis' },
+    { icon: Plane, label: 'Services', path: '/services' },
+    { icon: Users, label: 'Management', path: '/management' },
+    { icon: Settings, label: 'Settings', path: '/settings' },
   ];
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    if (path === '/') {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
   };
 
   const handleItemClick = () => {
@@ -76,9 +75,9 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
       <SidebarContent className="py-0 flex-1">
         <SidebarGroup>
           <SidebarMenu>
-            {sidebarItems.filter(item => !item.divider).slice(0, 4).map((item, index) => {
-              const Icon = item.icon!;
-              const active = isActive(item.path!);
+            {sidebarItems.map((item, index) => {
+              const Icon = item.icon;
+              const active = isActive(item.path);
               
               return (
                 <SidebarMenuItem key={index}>
@@ -92,40 +91,7 @@ export default function Sidebar({ isMobile, setIsMobileOpen }: {
                     tooltip={item.label}
                   >
                     <Link 
-                      to={item.path!}
-                      onClick={handleItemClick}
-                      className="flex items-center gap-2"
-                    >
-                      <Icon size={20} />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              );
-            })}
-          </SidebarMenu>
-        </SidebarGroup>
-        
-        <SidebarGroup className="mt-6">
-          <SidebarGroupLabel className="px-3 text-xs font-semibold text-gray-500">SERVICES</SidebarGroupLabel>
-          <SidebarMenu>
-            {sidebarItems.filter(item => !item.divider).slice(4).map((item, index) => {
-              const Icon = item.icon!;
-              const active = isActive(item.path!);
-              
-              return (
-                <SidebarMenuItem key={index}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={active}
-                    className={cn(
-                      "bg-transparent hover:bg-zippy-dark text-white hover:text-white focus-visible:ring-0 focus-visible:outline-none active:bg-zippy-dark",
-                      active && "bg-white/[0.05]"
-                    )}
-                    tooltip={item.label}
-                  >
-                    <Link 
-                      to={item.path!}
+                      to={item.path}
                       onClick={handleItemClick}
                       className="flex items-center gap-2"
                     >

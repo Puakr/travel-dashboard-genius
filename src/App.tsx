@@ -10,19 +10,12 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 import Layout from "./components/layout/Layout";
-import Dashboard from "./pages/Dashboard";
-import Bookings from "./pages/Bookings";
-import Analytics from "./pages/Analytics";
-import Users from "./pages/Users";
-import Stays from "./pages/Stays";
+import MainPage from "./pages/MainPage";
+import ServicePage from "./pages/ServicePage";
+import ManagementPage from "./pages/ManagementPage";
+import SettingsPage from "./pages/SettingsPage";
 import SignIn from "./pages/SignIn";
-import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import Flights from "./pages/Flights";
-import BusRentals from "./pages/BusRentals";
-import Attractions from "./pages/Attractions";
-import AirportTaxis from "./pages/AirportTaxis";
 
 const queryClient = new QueryClient();
 
@@ -41,77 +34,28 @@ const App = () => (
                 <Route path="/" element={
                   <ProtectedRoute>
                     <Layout>
-                      <Dashboard />
+                      <MainPage />
                     </Layout>
                   </ProtectedRoute>
                 } />
-                <Route path="/bookings" element={
+                <Route path="/services" element={
                   <ProtectedRoute>
                     <Layout>
-                      <Bookings />
+                      <ServicePage />
                     </Layout>
                   </ProtectedRoute>
                 } />
-                <Route path="/analytics" element={
+                <Route path="/management" element={
                   <ProtectedRoute>
                     <Layout>
-                      <Analytics />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/users" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <Users />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/stays" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <Stays />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/flights" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <Flights />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/bus-rentals" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <BusRentals />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/attractions" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <Attractions />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/airport-taxis" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <AirportTaxis />
-                    </Layout>
-                  </ProtectedRoute>
-                } />
-                <Route path="/profile" element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <Profile />
+                      <ManagementPage />
                     </Layout>
                   </ProtectedRoute>
                 } />
                 <Route path="/settings" element={
                   <ProtectedRoute>
                     <Layout>
-                      <Settings />
+                      <SettingsPage />
                     </Layout>
                   </ProtectedRoute>
                 } />
