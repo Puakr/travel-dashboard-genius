@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Edit, Eye, MapPin, Plane, Trash2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,8 @@ const flightData: FlightData[] = [
     destination: "London (LHR)",
     departureTime: "09:30 AM",
     price: 449,
-    status: "on-time"
+    status: "on-time",
+    duration: "7h 45m"
   },
   {
     id: 2,
@@ -35,7 +35,8 @@ const flightData: FlightData[] = [
     destination: "Tokyo (HND)",
     departureTime: "11:45 AM",
     price: 899,
-    status: "delayed"
+    status: "delayed",
+    duration: "11h 30m"
   },
   {
     id: 3,
@@ -45,7 +46,8 @@ const flightData: FlightData[] = [
     destination: "Paris (CDG)",
     departureTime: "07:15 PM",
     price: 599,
-    status: "on-time"
+    status: "on-time",
+    duration: "8h 20m"
   }
 ];
 
@@ -93,7 +95,6 @@ export default function Flights() {
     }
   };
 
-  // Flight Search Bar Component (inline)
   const FlightSearchBar = () => (
     <div className="flex flex-col sm:flex-row gap-4 p-4 bg-zippy-darker rounded-lg">
       <div className="relative flex-grow">
@@ -111,7 +112,6 @@ export default function Flights() {
     </div>
   );
 
-  // Flight Table Component (inline)
   const FlightTable = () => (
     <Card className="bg-zippy-darker border-white/[0.03] text-white">
       <CardHeader className="pb-0">
@@ -126,6 +126,7 @@ export default function Flights() {
               <TableHead>Departure</TableHead>
               <TableHead>Destination</TableHead>
               <TableHead>Time</TableHead>
+              <TableHead>Duration</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -139,6 +140,7 @@ export default function Flights() {
                 <TableCell>{flight.departure}</TableCell>
                 <TableCell>{flight.destination}</TableCell>
                 <TableCell>{flight.departureTime}</TableCell>
+                <TableCell>{flight.duration || "N/A"}</TableCell>
                 <TableCell>${flight.price}</TableCell>
                 <TableCell>
                   <Badge variant="outline" className={getStatusColor(flight.status)}>
@@ -182,7 +184,6 @@ export default function Flights() {
     </Card>
   );
 
-  // Flight Grid Component (inline)
   const FlightGrid = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredFlights.map(flight => (
@@ -226,6 +227,10 @@ export default function Flights() {
                 <span>Departure Time:</span>
                 <span className="font-medium">{flight.departureTime}</span>
               </div>
+              <div className="flex justify-between text-sm">
+                <span>Duration:</span>
+                <span className="font-medium">{flight.duration || "N/A"}</span>
+              </div>
             </div>
             <div className="flex justify-between">
               <div className="flex gap-2">
@@ -261,7 +266,6 @@ export default function Flights() {
     </div>
   );
 
-  // Empty State Component (inline)
   const EmptyFlightState = () => (
     <div className="glass-card rounded-xl p-12 flex flex-col items-center justify-center">
       <div className="w-16 h-16 rounded-full bg-zippy-blue/10 flex items-center justify-center text-zippy-blue mb-4">
