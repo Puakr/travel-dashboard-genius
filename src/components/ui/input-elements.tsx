@@ -1,14 +1,9 @@
 
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
-import { Input } from "@/components/ui/input-elements"
 
-// Export the Input component
-export { Input }
-
-// Re-implement Input component
-const InputComponent = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
+// Implement Input component
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
@@ -23,7 +18,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, React.ComponentProps<"
     )
   }
 )
-InputComponent.displayName = "Input"
+Input.displayName = "Input"
 
-// Update the export to include the implementation
-export { InputComponent as Input }
+// Export the Input component
+export { Input }
