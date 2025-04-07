@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
@@ -17,14 +16,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-elements";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BrightnessControl } from './BrightnessControl';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
-// Remove the HeaderProps interface since we no longer need those props
 export default function Header() {
   const [notifications, setNotifications] = useState(3);
   const { user, logout } = useAuth();

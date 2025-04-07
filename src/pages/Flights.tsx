@@ -1,8 +1,9 @@
+
 import { useState } from "react";
 import { Edit, Eye, MapPin, Plane, Trash2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/display-elements";
+import { Input } from "@/components/ui/input-elements";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Table,
