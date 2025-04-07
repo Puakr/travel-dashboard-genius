@@ -7,15 +7,23 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-// Re-export feedback components, avoiding duplicates
+// Export from alert directly
 export * from "@/components/ui/alert"
-export * from "@/components/ui/alert-dialog"
-export * from "@/components/ui/dialog"
-export * from "@/components/ui/display-elements"
-// Note: feedback-elements is now only exported directly, not through other files
-export * from "@/components/ui/feedback-elements"
+
+// Instead of exporting from both alert-dialog and modal-elements,
+// only export from one of them
+// export * from "@/components/ui/alert-dialog"
+
+// Only export from modal-elements to avoid conflicts
 export * from "@/components/ui/modal-elements"
-// Choose one Toaster implementation to export
+
+// Export directly from display-elements
+export * from "@/components/ui/display-elements"
+
+// Export directly from feedback-elements
+export * from "@/components/ui/feedback-elements"
+
+// Export toast components
 export { Toaster as SonnerToaster } from "@/components/ui/sonner"
 export * from "@/components/ui/toast"
 export * from "@/components/ui/toaster"
