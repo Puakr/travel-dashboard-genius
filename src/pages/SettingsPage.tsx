@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Settings as SettingsIcon, User, Switch as SwitchIcon } from "lucide-react";
+import { Settings as SettingsIcon, User, ToggleLeft } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
