@@ -9,7 +9,8 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 // Re-export all base components
-export * from "@/components/ui/avatar"
+// Removed avatar export since it's now handled in ui-display.tsx through media-elements.tsx
+// export * from "@/components/ui/avatar"
 export * from "@/components/ui/button"
 export * from "@/components/ui/calendar"
 export * from "@/components/ui/form"

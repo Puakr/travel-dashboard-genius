@@ -1,7 +1,6 @@
-
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/ui-display";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-elements";
 import { Label } from "@/components/ui/label";

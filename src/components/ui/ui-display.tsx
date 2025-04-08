@@ -14,7 +14,8 @@ import * as React from "react"
 
 // Re-export all display-related components
 export * from "@/components/ui/accordion"
-export * from "@/components/ui/avatar"
+// Remove direct export from avatar since it's already included in media-elements
+// export * from "@/components/ui/avatar" 
 export * from "@/components/ui/button" // Buttons are display elements that trigger actions
 export * from "@/components/ui/card"
 export * from "@/components/ui/carousel"
@@ -22,3 +23,4 @@ export * from "@/components/ui/chart"
 export * from "@/components/ui/table"
 export * from "@/components/ui/media-elements"
 export * from "@/components/ui/layout-elements" // Contains AspectRatio, ScrollArea, etc.
+
