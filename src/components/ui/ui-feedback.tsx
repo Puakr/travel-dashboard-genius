@@ -20,5 +20,4 @@ export { Toaster as SonnerToaster } from "@/components/ui/sonner"
 export * from "@/hooks/use-toast"
 export * from "@/components/ui/modal-elements" // Contains Dialog, AlertDialog, etc.
 export * from "@/components/ui/display-elements" // Contains Badge, Separator, etc.
-export * from "@/components/ui/progress"
 export * from "@/components/ui/feedback-elements"

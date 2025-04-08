@@ -22,6 +22,3 @@ export * from "@/components/ui/chart"
 export * from "@/components/ui/table"
 export * from "@/components/ui/media-elements"
 export * from "@/components/ui/layout-elements" // Contains AspectRatio, ScrollArea, etc.
-export * from "@/components/ui/collapsible"
-export * from "@/components/ui/hover-card"
-export * from "@/components/ui/popover"
