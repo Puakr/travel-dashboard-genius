@@ -1,9 +1,9 @@
-import { Toaster } from "@/components/ui/feedback";
-import { SonnerToaster } from "@/components/ui/feedback";
-import { TooltipProvider } from "@/components/ui/navigation";
+
+import { Toaster, SonnerToaster } from "@/components/ui/ui-feedback";
+import { TooltipProvider } from "@/components/ui/ui-navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/ui-navigation";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
