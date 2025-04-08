@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 
-export default function Profile() {
+const Profile = () => {
   const { user } = useAuth();
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -70,4 +70,6 @@ export default function Profile() {
       </div>
     </div>
   );
-}
+};
+
+export default Profile;
