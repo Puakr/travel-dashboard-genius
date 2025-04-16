@@ -62,6 +62,9 @@ export default function ResetPassword() {
       if (window.history.replaceState) {
         window.history.replaceState(null, "", window.location.pathname);
       }
+      
+      // Sign out after password reset to ensure clean login with new credentials
+      await supabase.auth.signOut();
     } catch (err: any) {
       setError(err.message || "Failed to reset password");
     } finally {
