@@ -57,8 +57,11 @@ export default function SignIn() {
     setError("");
     
     try {
+      // Get the current origin to use as redirectTo
+      const origin = window.location.origin;
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${origin}/reset-password`,
       });
       
       if (error) {
@@ -130,7 +133,7 @@ export default function SignIn() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="admin@example.com"
+                      placeholder="animeshbaral10@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="bg-zippy-darker border-white/10"

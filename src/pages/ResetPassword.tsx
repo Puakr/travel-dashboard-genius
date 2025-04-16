@@ -16,11 +16,13 @@ export default function ResetPassword() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [tokenError, setTokenError] = useState(false);
 
   useEffect(() => {
     // Check if we have a hash fragment in the URL (from password reset email)
     const hash = window.location.hash;
     if (!hash || !hash.includes("access_token")) {
+      setTokenError(true);
       setError("Invalid or expired reset link. Please request a new password reset.");
     }
   }, []);
@@ -55,6 +57,11 @@ export default function ResetPassword() {
       
       setIsSuccess(true);
       toast.success("Password has been reset successfully");
+      
+      // Clear hash fragment from URL
+      if (window.history.replaceState) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
     } catch (err: any) {
       setError(err.message || "Failed to reset password");
     } finally {
@@ -92,7 +99,19 @@ export default function ResetPassword() {
               </Alert>
             )}
             
-            {isSuccess ? (
+            {tokenError ? (
+              <div className="text-center py-4">
+                <p className="text-white mb-4">
+                  The password reset link is invalid or has expired.
+                </p>
+                <Button
+                  className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
+                  onClick={() => navigate("/sign-in")}
+                >
+                  Back to Sign In
+                </Button>
+              </div>
+            ) : isSuccess ? (
               <div className="text-center py-4">
                 <p className="text-white mb-4">
                   Your password has been reset successfully!
