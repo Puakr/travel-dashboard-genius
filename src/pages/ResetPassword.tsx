@@ -69,6 +69,10 @@ export default function ResetPassword() {
     }
   };
 
+  const handleBackToSignIn = () => {
+    navigate("/sign-in");
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zippy-darker">
       <div className="w-full max-w-md px-4 py-8 mx-auto">
@@ -106,7 +110,7 @@ export default function ResetPassword() {
                 </p>
                 <Button
                   className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
-                  onClick={() => navigate("/sign-in")}
+                  onClick={handleBackToSignIn}
                 >
                   Back to Sign In
                 </Button>
@@ -118,7 +122,7 @@ export default function ResetPassword() {
                 </p>
                 <Button
                   className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
-                  onClick={() => navigate("/sign-in")}
+                  onClick={handleBackToSignIn}
                 >
                   Sign In
                 </Button>
@@ -167,7 +171,7 @@ export default function ResetPassword() {
           </CardContent>
           <CardFooter className="flex justify-center">
             <button 
-              onClick={() => navigate("/sign-in")}
+              onClick={handleBackToSignIn}
               className="text-sm text-zippy-blue hover:underline focus:outline-none"
             >
               Back to Sign In

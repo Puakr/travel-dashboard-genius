@@ -77,6 +77,12 @@ export default function SignIn() {
     }
   };
 
+  const handleBackToSignIn = () => {
+    setIsForgotPassword(false);
+    setResetSent(false);
+    setError("");
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zippy-darker">
       <div className="w-full max-w-md px-4 py-8 mx-auto">
@@ -118,7 +124,7 @@ export default function SignIn() {
                 </p>
                 <Button
                   className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
-                  onClick={() => setIsForgotPassword(false)}
+                  onClick={handleBackToSignIn}
                 >
                   Back to Sign In
                 </Button>
@@ -174,7 +180,7 @@ export default function SignIn() {
               <div className="text-center w-full">
                 {isForgotPassword ? (
                   <button 
-                    onClick={() => setIsForgotPassword(false)}
+                    onClick={handleBackToSignIn}
                     className="text-sm text-zippy-blue hover:underline focus:outline-none"
                   >
                     Back to Sign In
