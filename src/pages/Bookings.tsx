@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { 
   CalendarRange, 
@@ -6,7 +7,7 @@ import {
   ChevronRight, 
   Filter
 } from 'lucide-react';
-import { Input } from '@/components/ui/input-elements';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -46,6 +47,7 @@ export default function Bookings() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   
+  // Filter bookings based on search and status filter
   const filteredBookings = bookingsData.filter(booking => {
     const matchesSearch = 
       booking.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -57,6 +59,7 @@ export default function Bookings() {
     return matchesSearch && matchesStatus;
   });
   
+  // Calculate pagination
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -146,6 +149,7 @@ export default function Bookings() {
           </table>
         </div>
         
+        {/* Pagination */}
         {filteredBookings.length > 0 && (
           <div className="px-6 py-4 border-t border-white/5 flex items-center justify-between">
             <div className="text-sm text-gray-400">

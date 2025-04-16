@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { Car, Search, MapPin, Edit, Trash2, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input-elements";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/display-elements";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,

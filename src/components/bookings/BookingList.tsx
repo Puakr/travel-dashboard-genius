@@ -4,7 +4,7 @@ import { Booking } from '@/types/bookings';
 import { getBookingsByType } from '@/data/mockBookings';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/display-elements";
+import { Badge } from "@/components/ui/badge";
 import { format } from 'date-fns';
 
 interface BookingListProps {

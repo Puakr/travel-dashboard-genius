@@ -8,5 +8,4 @@ export interface FlightData {
   departureTime: string;
   price: number;
   status: "on-time" | "delayed" | "cancelled";
-  duration?: string; // Adding an optional duration field
 }

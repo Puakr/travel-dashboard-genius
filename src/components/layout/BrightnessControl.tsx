@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Slider } from "@/components/ui/slider";
 import { SunMedium } from "lucide-react";
@@ -5,7 +6,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-elements";
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
 export function BrightnessControl() {
