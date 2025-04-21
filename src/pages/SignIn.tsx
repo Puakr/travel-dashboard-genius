@@ -59,18 +59,24 @@ export default function SignIn() {
     try {
       // Get the current origin to use as redirectTo
       const origin = window.location.origin;
+      const redirectUrl = `${origin}/reset-password`;
+      
+      console.log("Sending password reset to:", email);
+      console.log("Redirect URL:", redirectUrl);
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/reset-password`,
+        redirectTo: redirectUrl,
       });
       
       if (error) {
+        console.error("Password reset error:", error);
         throw error;
       }
       
       setResetSent(true);
       toast.success("Password reset link sent to your email");
     } catch (err: any) {
+      console.error("Failed to send reset email:", err);
       setError(err.message || "Failed to send reset email");
     } finally {
       setIsLoading(false);

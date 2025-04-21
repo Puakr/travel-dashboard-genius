@@ -21,7 +21,10 @@ export default function ResetPassword() {
   useEffect(() => {
     // Check if we have a hash fragment in the URL (from password reset email)
     const hash = window.location.hash;
+    console.log("URL hash:", hash);
+    
     if (!hash || !hash.includes("access_token")) {
+      console.error("Invalid or missing token in URL");
       setTokenError(true);
       setError("Invalid or expired reset link. Please request a new password reset.");
     }
@@ -49,12 +52,15 @@ export default function ResetPassword() {
     setError("");
     
     try {
-      const { error } = await supabase.auth.updateUser({ password });
+      console.log("Updating password");
+      const { data, error } = await supabase.auth.updateUser({ password });
       
       if (error) {
+        console.error("Password update error:", error);
         throw error;
       }
       
+      console.log("Password update successful:", data);
       setIsSuccess(true);
       toast.success("Password has been reset successfully");
       
@@ -65,7 +71,12 @@ export default function ResetPassword() {
       
       // Sign out after password reset to ensure clean login with new credentials
       await supabase.auth.signOut();
+      
+      // Clear any stored auth data to ensure a fresh login
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("user");
     } catch (err: any) {
+      console.error("Reset password error:", err);
       setError(err.message || "Failed to reset password");
     } finally {
       setIsLoading(false);
