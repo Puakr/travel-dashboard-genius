@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (session?.user) {
           // For now, we'll use the existing mock user system
           // In a real app, you would fetch the user profile from Supabase here
+          
           if (event === 'PASSWORD_RECOVERY') {
             console.log("Password recovery flow detected");
             // Don't automatically log in the user for password recovery
@@ -58,12 +59,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           
           if (event === 'TOKEN_REFRESHED') {
             console.log("Token refreshed");
-            // Don't automatically log in the user for token refresh
-            return;
+            // For token refresh, check if we already have a user logged in
+            if (user) {
+              return; // Keep existing session
+            }
           }
           
-          // For other auth events like sign in, we handle the user session
-          if (event === 'SIGNED_IN') {
+          // For other auth events like sign in or token refresh after password reset
+          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
             console.log("User signed in via Supabase", session.user);
             
             // Specifically for our admin user
@@ -80,6 +83,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               
               setUser(adminUser);
               setIsAuthenticated(true);
+              
+              // Navigate to home page if not already there
+              const currentPath = window.location.pathname;
+              if (currentPath.includes('/sign-in') || currentPath.includes('/reset-password')) {
+                navigate('/');
+              }
             }
           }
         } else if (event === 'SIGNED_OUT') {
@@ -88,6 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setIsAuthenticated(false);
           localStorage.removeItem("isAuthenticated");
           localStorage.removeItem("user");
+          navigate("/sign-in");
         }
       }
     );
@@ -95,7 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [navigate]);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // For demo purposes with our mock data
