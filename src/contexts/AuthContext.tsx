@@ -45,14 +45,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         if (session?.user) {
           // For now, we'll use the existing mock user system
           // In a real app, you would fetch the user profile from Supabase here
-          if (event === 'PASSWORD_RECOVERY' || event === 'TOKEN_REFRESHED') {
-            // Don't automatically log in the user for these events
-            return;
-          }
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setIsAuthenticated(false);
@@ -86,40 +82,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return true;
     }
 
-    // For the admin email case (animeshbaral10@gmail.com)
-    if (email === "animeshbaral10@gmail.com") {
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+    // In a real implementation with Supabase
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-        if (error) {
-          toast.error(error.message);
-          return false;
-        }
-
-        if (data.user) {
-          const user = {
-            id: data.user.id,
-            name: "Admin",
-            email: data.user.email || "animeshbaral10@gmail.com",
-            role: "Administrator"
-          };
-          
-          // Store authentication state
-          localStorage.setItem("isAuthenticated", "true");
-          localStorage.setItem("user", JSON.stringify(user));
-          
-          setUser(user);
-          setIsAuthenticated(true);
-          return true;
-        }
-      } catch (err) {
-        console.error("Login error:", err);
-        toast.error("Failed to log in");
+      if (error) {
+        toast.error(error.message);
         return false;
       }
+
+      // Fetch user profile
+      // const { data: profile } = await supabase.from('profiles').select().eq('id', data.user.id).single();
+      // setUser({ ...data.user, ...profile });
+
+      return true;
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error("Failed to log in");
+      return false;
     }
 
     return false;
