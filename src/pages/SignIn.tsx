@@ -60,42 +60,21 @@ export default function SignIn() {
       // Get the current origin to use as redirectTo
       const origin = window.location.origin;
       
-      // For local development, ensure we're using a site URL that's configured in Supabase
-      const redirectTo = origin.includes('localhost') 
-        ? 'http://localhost:5173/reset-password' 
-        : `${origin}/reset-password`;
-      
-      console.log("Sending reset email with redirect to:", redirectTo);
-      
-      const { error, data } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectTo,
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${origin}/reset-password`,
       });
       
       if (error) {
-        console.error("Password reset error:", error);
         throw error;
       }
       
-      console.log("Reset password response:", data);
       setResetSent(true);
-      toast.success("Password reset link sent to your email", {
-        description: "Please check your inbox (and spam folder). You should receive it within a few minutes."
-      });
+      toast.success("Password reset link sent to your email");
     } catch (err: any) {
-      console.error("Failed to send reset email:", err);
       setError(err.message || "Failed to send reset email");
-      toast.error("There was a problem sending the reset email", {
-        description: "Please make sure you've entered a valid email address that is registered with us."
-      });
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleBackToSignIn = () => {
-    setIsForgotPassword(false);
-    setResetSent(false);
-    setError("");
   };
 
   return (
@@ -135,30 +114,14 @@ export default function SignIn() {
             {resetSent ? (
               <div className="text-center py-4">
                 <p className="text-white mb-4">
-                  We've sent a password reset link to <span className="font-medium">{email}</span>.
+                  We've sent a password reset link to your email address.
                 </p>
-                <p className="text-gray-400 mb-4">
-                  Please check your inbox and spam folder. If you don't receive an email within a few minutes, 
-                  you can try again or contact support.
-                </p>
-                <div className="flex flex-col gap-2">
-                  <Button
-                    className="bg-zippy-blue hover:bg-zippy-blue/90"
-                    onClick={handleBackToSignIn}
-                  >
-                    Back to Sign In
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="border-gray-600"
-                    onClick={() => {
-                      setResetSent(false);
-                      setError("");
-                    }}
-                  >
-                    Try Again
-                  </Button>
-                </div>
+                <Button
+                  className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
+                  onClick={() => setIsForgotPassword(false)}
+                >
+                  Back to Sign In
+                </Button>
               </div>
             ) : (
               <form onSubmit={isForgotPassword ? handleForgotPassword : handleSignIn}>
@@ -170,7 +133,7 @@ export default function SignIn() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="youremail@example.com"
+                      placeholder="animeshbaral10@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="bg-zippy-darker border-white/10"
@@ -211,7 +174,7 @@ export default function SignIn() {
               <div className="text-center w-full">
                 {isForgotPassword ? (
                   <button 
-                    onClick={handleBackToSignIn}
+                    onClick={() => setIsForgotPassword(false)}
                     className="text-sm text-zippy-blue hover:underline focus:outline-none"
                   >
                     Back to Sign In

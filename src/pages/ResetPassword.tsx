@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle, Plane, CheckCircle } from "lucide-react";
+import { AlertCircle, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -17,16 +17,13 @@ export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [tokenError, setTokenError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
+    // Check if we have a hash fragment in the URL (from password reset email)
     const hash = window.location.hash;
     if (!hash || !hash.includes("access_token")) {
       setTokenError(true);
       setError("Invalid or expired reset link. Please request a new password reset.");
-      console.error("No access token found in URL hash");
-    } else {
-      console.log("Access token found in URL hash");
     }
   }, []);
 
@@ -52,41 +49,24 @@ export default function ResetPassword() {
     setError("");
     
     try {
-      console.log("Attempting to update password...");
-      const { data, error } = await supabase.auth.updateUser({ password });
-      
-      console.log("Password update response:", data, error);
+      const { error } = await supabase.auth.updateUser({ password });
       
       if (error) {
         throw error;
       }
       
       setIsSuccess(true);
-      toast.success("Password has been reset successfully", {
-        description: "You can now sign in with your new password"
-      });
+      toast.success("Password has been reset successfully");
       
+      // Clear hash fragment from URL
       if (window.history.replaceState) {
         window.history.replaceState(null, "", window.location.pathname);
       }
-      
-      // Auto redirect to sign in page after 3 seconds
-      setTimeout(() => {
-        navigate("/sign-in");
-      }, 3000);
     } catch (err: any) {
-      console.error("Password reset error:", err);
       setError(err.message || "Failed to reset password");
-      toast.error("Failed to reset password", {
-        description: err.message || "Please try again or request a new reset link"
-      });
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleBackToSignIn = () => {
-    navigate("/sign-in");
   };
 
   return (
@@ -108,7 +88,7 @@ export default function ResetPassword() {
               Reset Password
             </CardTitle>
             <CardDescription className="text-center">
-              {tokenError ? "Link error" : isSuccess ? "Success" : "Enter your new password"}
+              Enter your new password
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -124,30 +104,24 @@ export default function ResetPassword() {
                 <p className="text-white mb-4">
                   The password reset link is invalid or has expired.
                 </p>
-                <p className="text-gray-400 mb-4">
-                  Please request a new password reset link.
-                </p>
                 <Button
                   className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
-                  onClick={handleBackToSignIn}
+                  onClick={() => navigate("/sign-in")}
                 >
                   Back to Sign In
                 </Button>
               </div>
             ) : isSuccess ? (
               <div className="text-center py-4">
-                <div className="flex justify-center mb-4">
-                  <CheckCircle className="h-16 w-16 text-green-500" />
-                </div>
-                <p className="text-white mb-2 text-xl font-medium">
-                  Password Reset Successful!
+                <p className="text-white mb-4">
+                  Your password has been reset successfully!
                 </p>
-                <p className="text-gray-400 mb-6">
-                  Your password has been updated. You'll be redirected to the login page in a moment.
-                </p>
-                <div className="animate-pulse mb-2 text-center text-sm text-gray-500">
-                  Redirecting...
-                </div>
+                <Button
+                  className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
+                  onClick={() => navigate("/sign-in")}
+                >
+                  Sign In
+                </Button>
               </div>
             ) : (
               <form onSubmit={handleResetPassword}>
@@ -156,68 +130,44 @@ export default function ResetPassword() {
                     <label htmlFor="password" className="block text-sm font-medium text-white">
                       New Password
                     </label>
-                    <div className="relative">
-                      <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="bg-zippy-darker border-white/10 pr-10"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 text-gray-400"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? "Hide" : "Show"}
-                      </Button>
-                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="bg-zippy-darker border-white/10"
+                    />
                   </div>
                   
                   <div className="space-y-2">
                     <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">
                       Confirm Password
                     </label>
-                    <div className="relative">
-                      <Input
-                        id="confirmPassword"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="bg-zippy-darker border-white/10 pr-10"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 text-gray-400"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? "Hide" : "Show"}
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-2">
-                    <Button 
-                      className="w-full bg-zippy-blue hover:bg-zippy-blue/90 rounded-md h-12" 
-                      type="submit" 
-                      disabled={isLoading}
-                    >
-                      {isLoading ? "Resetting..." : "Reset Password"}
-                    </Button>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      placeholder="••••••••"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="bg-zippy-darker border-white/10"
+                    />
                   </div>
                 </div>
+                
+                <Button 
+                  className="mt-6 w-full bg-zippy-blue hover:bg-zippy-blue/90 rounded-md h-12" 
+                  type="submit" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Resetting..." : "Reset Password"}
+                </Button>
               </form>
             )}
           </CardContent>
           <CardFooter className="flex justify-center">
             <button 
-              onClick={handleBackToSignIn}
+              onClick={() => navigate("/sign-in")}
               className="text-sm text-zippy-blue hover:underline focus:outline-none"
             >
               Back to Sign In
