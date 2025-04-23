@@ -17,11 +17,46 @@ export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [tokenError, setTokenError] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     // Check if we have a hash fragment in the URL (from password reset email)
     const hash = window.location.hash;
+    console.log("URL hash:", hash);
+    
     if (!hash || !hash.includes("access_token")) {
+      console.error("Invalid or missing token in URL");
+      setTokenError(true);
+      setError("Invalid or expired reset link. Please request a new password reset.");
+      return;
+    }
+
+    // Extract access token and type
+    const hashParams = new URLSearchParams(hash.substring(1));
+    const token = hashParams.get("access_token");
+    const type = hashParams.get("type");
+    
+    if (token && type === "recovery") {
+      console.log("Valid recovery token found");
+      setAccessToken(token);
+      
+      // Get user email from token
+      const getUser = async () => {
+        const { data, error } = await supabase.auth.getUser(token);
+        if (error) {
+          console.error("Error getting user from token:", error);
+          setTokenError(true);
+          setError("Invalid or expired token. Please request a new password reset.");
+        } else if (data?.user) {
+          console.log("User found from token:", data.user.email);
+          setEmail(data.user.email || "");
+        }
+      };
+      
+      getUser();
+    } else {
+      console.error("Invalid token or not a recovery token");
       setTokenError(true);
       setError("Invalid or expired reset link. Please request a new password reset.");
     }
@@ -49,10 +84,42 @@ export default function ResetPassword() {
     setError("");
     
     try {
-      const { error } = await supabase.auth.updateUser({ password });
+      console.log("Updating password");
+      const { data, error } = await supabase.auth.updateUser({ password });
       
       if (error) {
+        console.error("Password update error:", error);
         throw error;
+      }
+      
+      console.log("Password update successful:", data);
+      
+      // Auto sign in with new password if we have the email
+      if (email) {
+        console.log("Attempting to sign in with updated password");
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+        
+        if (signInError) {
+          console.error("Auto sign-in after reset failed:", signInError);
+          // Continue with success message even if auto-login fails
+        } else {
+          console.log("Auto sign-in successful:", signInData);
+          // Store auth in localStorage for our AuthContext
+          if (signInData.user) {
+            const user = {
+              id: signInData.user.id,
+              name: "Admin",
+              email: signInData.user.email || email,
+              role: "Administrator"
+            };
+            
+            localStorage.setItem("isAuthenticated", "true");
+            localStorage.setItem("user", JSON.stringify(user));
+          }
+        }
       }
       
       setIsSuccess(true);
@@ -62,7 +129,13 @@ export default function ResetPassword() {
       if (window.history.replaceState) {
         window.history.replaceState(null, "", window.location.pathname);
       }
+      
+      // Redirect to home page after successful reset and auto-login
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } catch (err: any) {
+      console.error("Reset password error:", err);
       setError(err.message || "Failed to reset password");
     } finally {
       setIsLoading(false);
@@ -120,12 +193,7 @@ export default function ResetPassword() {
                 <p className="text-white mb-4">
                   Your password has been reset successfully!
                 </p>
-                <Button
-                  className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
-                  onClick={handleBackToSignIn}
-                >
-                  Sign In
-                </Button>
+                <p className="text-white">Redirecting you to the dashboard...</p>
               </div>
             ) : (
               <form onSubmit={handleResetPassword}>
@@ -170,12 +238,14 @@ export default function ResetPassword() {
             )}
           </CardContent>
           <CardFooter className="flex justify-center">
-            <button 
-              onClick={handleBackToSignIn}
-              className="text-sm text-zippy-blue hover:underline focus:outline-none"
-            >
-              Back to Sign In
-            </button>
+            {!isSuccess && (
+              <button 
+                onClick={handleBackToSignIn}
+                className="text-sm text-zippy-blue hover:underline focus:outline-none"
+              >
+                Back to Sign In
+              </button>
+            )}
           </CardFooter>
         </Card>
       </div>
