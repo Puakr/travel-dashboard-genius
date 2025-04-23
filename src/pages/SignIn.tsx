@@ -47,45 +47,29 @@ export default function SignIn() {
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!email) {
       setError("Please enter your email address");
       return;
     }
-
+    
     setIsLoading(true);
     setError("");
-
+    
     try {
-      // If admin email, send password by email
-      if (email === "animeshbaral10@gmail.com") {
-        const response = await fetch(
-          "https://xafiddtuadioiitvshqg.functions.supabase.co/send-admin-password",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email }),
-          }
-        );
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error);
-        }
-        setResetSent(true);
-        toast.success("Admin password sent to your email address");
-      } else {
-        // Normal Supabase password reset
-        const origin = window.location.origin;
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${origin}/reset-password`,
-        });
-
-        if (error) {
-          throw error;
-        }
-        setResetSent(true);
-        toast.success("Password reset link sent to your email");
+      // Get the current origin to use as redirectTo
+      const origin = window.location.origin;
+      
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${origin}/reset-password`,
+      });
+      
+      if (error) {
+        throw error;
       }
+      
+      setResetSent(true);
+      toast.success("Password reset link sent to your email");
     } catch (err: any) {
       setError(err.message || "Failed to send reset email");
     } finally {
