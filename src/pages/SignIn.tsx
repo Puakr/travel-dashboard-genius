@@ -57,6 +57,7 @@ export default function SignIn() {
     setError("");
     
     try {
+      // For Supabase, we don't need to send a separate email - resetPasswordForEmail handles it
       // Get the current origin to use as redirectTo
       const origin = window.location.origin;
       const redirectUrl = `${origin}/reset-password`;
