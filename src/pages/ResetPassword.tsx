@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, Plane } from "lucide-react";
@@ -19,7 +18,6 @@ export default function ResetPassword() {
   const [tokenError, setTokenError] = useState(false);
 
   useEffect(() => {
-    // Check if we have a hash fragment in the URL (from password reset email)
     const hash = window.location.hash;
     if (!hash || !hash.includes("access_token")) {
       setTokenError(true);
@@ -58,7 +56,6 @@ export default function ResetPassword() {
       setIsSuccess(true);
       toast.success("Password has been reset successfully");
       
-      // Clear hash fragment from URL
       if (window.history.replaceState) {
         window.history.replaceState(null, "", window.location.pathname);
       }
@@ -120,12 +117,9 @@ export default function ResetPassword() {
                 <p className="text-white mb-4">
                   Your password has been reset successfully!
                 </p>
-                <Button
-                  className="mt-4 bg-zippy-blue hover:bg-zippy-blue/90"
-                  onClick={handleBackToSignIn}
-                >
-                  Sign In
-                </Button>
+                <p className="text-gray-400">
+                  You can now sign in with your new password.
+                </p>
               </div>
             ) : (
               <form onSubmit={handleResetPassword}>
